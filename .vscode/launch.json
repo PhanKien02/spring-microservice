@@ -1,0 +1,24 @@
+{
+        "configurations": [
+                {
+                        "type": "java",
+                        "name": "Spring Boot-UserApplication<user>",
+                        "request": "launch",
+                        "cwd": "${workspaceFolder}",
+                        "mainClass": "com.example.user.UserApplication",
+                        "projectName": "user",
+                        "args": "",
+                        "envFile": "${workspaceFolder}/.env"
+                },
+                {
+                        "type": "java",
+                        "name": "Spring Boot-GatewayApplication<gateway>",
+                        "request": "launch",
+                        "cwd": "${workspaceFolder}",
+                        "mainClass": "com.example.gateway.GatewayApplication",
+                        "projectName": "gateway",
+                        "args": "",
+                        "envFile": "${workspaceFolder}/.env"
+                }
+        ]
+}
