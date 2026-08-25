@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.user.dto.CreateUserReq;
+import com.example.user.dto.UpdateUserReq;
 import com.example.user.dto.UserRes;
 import com.example.user.service.UserService;
 import org.springframework.web.client.HttpClientErrorException;
@@ -42,8 +43,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserRes getUserById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUserById'");
+      User user = this.userRepositoty.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND,"User not found"));
+      return UserRes.builder()
+              .email(user.getEmail())
+              .name(user.getName())
+              .id(user.getId())
+              .build();
     }
 
     @Override
@@ -53,15 +58,25 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserRes updateUser(String id, CreateUserReq req) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+    public UserRes updateUser(String id, UpdateUserReq req) {
+        User user = this.userRepositoty.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND,"User not found"));
+        user.setEmail(req.getEmail());
+        user.setName(req.getName());
+        user.setPassword(req.getPassword());
+        User saveUser=  this.userRepositoty.save(user);
+        return UserRes.builder()
+                .email(saveUser.getEmail())
+                .name(saveUser.getName())
+                .id(saveUser.getId())
+                .build();
     }
 
     @Override
-    public UserRes deleteUser(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+    public boolean deleteUser(String id) {
+        User user = this.userRepositoty.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND,"User not found"));
+        user.setActive(false);  
+        this.userRepositoty.save(user);
+        return true;
     }
 
 }

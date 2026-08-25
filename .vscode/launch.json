@@ -19,6 +19,16 @@
                         "projectName": "gateway",
                         "args": "",
                         "envFile": "${workspaceFolder}/.env"
+                },
+                {
+                        "type": "java",
+                        "name": "Spring Boot-DiscoveryServerApplication<discovery-server>",
+                        "request": "launch",
+                        "cwd": "${workspaceFolder}",
+                        "mainClass": "com.example.discovery_server.DiscoveryServerApplication",
+                        "projectName": "discovery-server",
+                        "args": "",
+                        "envFile": "${workspaceFolder}/.env"
                 }
         ]
 }

@@ -17,8 +17,9 @@ public class UserController {
     public UserRes createUser(@RequestBody CreateUserReq req) {
        return this.userService.createUser(req);
     }
-    @GetMapping
-    public String getUser() {
-       return "hello";
+    
+    @GetMapping("/{id}" )
+    public UserRes getUser( @PathVariable String id) {
+       return this.userService.getUserById(id); 
     }
 }
