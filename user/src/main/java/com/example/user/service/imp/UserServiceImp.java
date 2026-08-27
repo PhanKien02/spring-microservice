@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.user.entity.User;
+import com.example.user.exeption.AppException;
 import com.example.user.repository.UserRepositoty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import com.example.user.dto.CreateUserReq;
 import com.example.user.dto.UpdateUserReq;
 import com.example.user.dto.UserRes;
 import com.example.user.service.UserService;
-import org.springframework.web.client.HttpClientErrorException;
 
 @Slf4j
 @Service
@@ -28,7 +28,9 @@ public class UserServiceImp implements UserService {
     @Override
     public UserRes createUser(CreateUserReq req) {
         Optional<User> hasEmail = this.userRepositoty.findByEmail(req.getEmail());
-        if(hasEmail.isPresent()) throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,"Email exits");
+        if (hasEmail.isPresent()) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Email exists");
+        }
         User user = User.builder().email(req.getEmail())
                 .password(req.getPassword())
                 .name(req.getName())
@@ -43,7 +45,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserRes getUserById(String id) {
-      User user = this.userRepositoty.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND,"User not found"));
+      User user = this.userRepositoty.findById(id)
+              .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found"));
       return UserRes.builder()
               .email(user.getEmail())
               .name(user.getName())
@@ -59,7 +62,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserRes updateUser(String id, UpdateUserReq req) {
-        User user = this.userRepositoty.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND,"User not found"));
+        User user = this.userRepositoty.findById(id)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found"));
         user.setEmail(req.getEmail());
         user.setName(req.getName());
         user.setPassword(req.getPassword());
@@ -73,7 +77,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean deleteUser(String id) {
-        User user = this.userRepositoty.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND,"User not found"));
+        User user = this.userRepositoty.findById(id)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found"));
         user.setActive(false);  
         this.userRepositoty.save(user);
         return true;
