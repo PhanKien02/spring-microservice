@@ -1,4 +1,4 @@
-package com.example.user.exeption;
+package com.example.gateway.exeption;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.example.user.http.ApiResult;
-import com.example.user.http.ResponseData;
+import com.example.gateway.http.ApiResult;
+import com.example.gateway.http.ResponseData;
 
 import java.util.HashMap;
 import java.util.Map;
+import io.jsonwebtoken.JwtException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ResponseData> handleAppException(AppException exception) {
         return ApiResult.response(exception.getStatus(), exception.getMessage(), null, null);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ResponseData> handleJwtException(JwtException exception) {
+        return ApiResult.response(HttpStatus.UNAUTHORIZED, "Invalid or expired token: " + exception.getMessage(), null,
+                null);
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
@@ -33,8 +40,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseData> handleUnexpectedException(Exception exception) {
-        ResponseData responseData =new ResponseData();
-        responseData.addData("exception",(exception));
+        ResponseData responseData = new ResponseData();
+        responseData.addData("exception", (exception));
         return ApiResult.response(HttpStatus.INTERNAL_SERVER_ERROR,
                 exception.getMessage(), responseData, null);
     }

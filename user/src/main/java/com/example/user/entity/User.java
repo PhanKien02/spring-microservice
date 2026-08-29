@@ -1,5 +1,6 @@
 package com.example.user.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -15,11 +16,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
-    private String name;
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String password;
-    private String role;
-    private boolean isActive ;
+    @Column(nullable = false)
+    private boolean isActive = false;
 }

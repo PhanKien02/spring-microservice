@@ -1,14 +1,10 @@
-package com.example.user.http;
+package com.example.gateway.http;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-@Setter
 public class ResponseData {
 
     private Boolean isSuccess;
@@ -18,6 +14,38 @@ public class ResponseData {
 
     public ResponseData() {
         this.data = new HashMap<>();
+    }
+
+    public Boolean getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(Boolean isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public HttpStatus getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(HttpStatus statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public HashMap<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(HashMap<String, Object> data) {
+        this.data = data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public void addData(String key, Object data) {

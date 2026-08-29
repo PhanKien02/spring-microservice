@@ -5,7 +5,6 @@ import com.example.user.dto.UpdateUserReq;
 import com.example.user.dto.UserRes;
 
 public interface UserService {
-    public UserRes createUser(CreateUserReq req);
 
     public UserRes getUserById(String id);
 

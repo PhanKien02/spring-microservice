@@ -1,7 +1,6 @@
 package com.example.user.service.imp;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.example.user.entity.User;
 import com.example.user.exeption.AppException;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.example.user.dto.CreateUserReq;
 import com.example.user.dto.UpdateUserReq;
 import com.example.user.dto.UserRes;
 import com.example.user.service.UserService;
@@ -26,30 +24,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserRes createUser(CreateUserReq req) {
-        Optional<User> hasEmail = this.userRepositoty.findByEmail(req.getEmail());
-        if (hasEmail.isPresent()) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Email exists");
-        }
-        User user = User.builder().email(req.getEmail())
-                .password(req.getPassword())
-                .name(req.getName())
-                .build();
-        User saveUser=  this.userRepositoty.save(user);
-        return UserRes.builder()
-                .email(saveUser.getEmail())
-                .name(saveUser.getName())
-                .id(saveUser.getId())
-                .build();
-    }
-
-    @Override
     public UserRes getUserById(String id) {
       User user = this.userRepositoty.findById(id)
               .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found"));
       return UserRes.builder()
               .email(user.getEmail())
-              .name(user.getName())
+              .name(user.getFullName())
               .id(user.getId())
               .build();
     }
@@ -65,12 +45,12 @@ public class UserServiceImp implements UserService {
         User user = this.userRepositoty.findById(id)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found"));
         user.setEmail(req.getEmail());
-        user.setName(req.getName());
+        user.setFullName(req.getName());
         user.setPassword(req.getPassword());
         User saveUser=  this.userRepositoty.save(user);
         return UserRes.builder()
                 .email(saveUser.getEmail())
-                .name(saveUser.getName())
+                .name(saveUser.getFullName())
                 .id(saveUser.getId())
                 .build();
     }
