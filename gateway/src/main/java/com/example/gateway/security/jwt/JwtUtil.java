@@ -24,15 +24,6 @@ public class JwtUtil {
         this.expiration = expiration;
     }
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .subject(username)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(this.secretKey)
-                .compact();
-    }
-
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
     }

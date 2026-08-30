@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 
 import com.example.gateway.http.ApiResult;
 import com.example.gateway.http.ResponseData;
@@ -18,9 +19,10 @@ import io.jsonwebtoken.JwtException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AppException.class)
+    @ExceptionHandler(Unauthorized.class)
     public ResponseEntity<ResponseData> handleAppException(AppException exception) {
-        return ApiResult.response(exception.getStatus(), exception.getMessage(), null, null);
+        return ApiResult.response(HttpStatus.UNAUTHORIZED, "Invalid or expired token: " + exception.getMessage(), null,
+                null);
     }
 
     @ExceptionHandler(JwtException.class)
